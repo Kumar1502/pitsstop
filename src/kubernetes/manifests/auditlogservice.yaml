@@ -23,7 +23,7 @@ spec:
       containers:
         - name: auditlogservice
           image: panky7700/auditlogservice:1.0
-          restartPolicy: Always
+      restartPolicy: Always
           # resources:
           #   limits:
           #     cpu: 1000m
