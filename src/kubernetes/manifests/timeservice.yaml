@@ -1,0 +1,30 @@
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: timeservice
+spec:
+  minReadySeconds: 5
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  selector:
+    matchLabels:
+      app: timeservice
+  template:
+    metadata:
+      labels: 
+        app: timeservice
+        version: v1.0
+    spec:
+      containers:
+        - name: timeservice
+          image: pitstop/timeservice:1.0
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 350Mi
+        

@@ -1,0 +1,67 @@
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vehiclemanagementapi
+spec:
+  minReadySeconds: 5
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  selector:
+    matchLabels:
+      app: vehiclemanagementapi
+  template:
+    metadata:
+      labels: 
+        app: vehiclemanagementapi
+        version: v1.0
+    spec:
+      containers:
+        - name: vehiclemanagementapi
+          image: pitstop/vehiclemanagementapi:1.0
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 350Mi
+          ports:
+            - containerPort: 5000
+              protocol: "TCP"
+          volumeMounts:
+            - name: vehiclemanagementapi-vol
+              mountPath: /var/lib
+      volumes: 
+        - name: vehiclemanagementapi-vol
+          persistentVolumeClaim:
+            claimName: vehiclemanagementapi-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vehiclemanagementapi-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: managed-csi
+  resources:
+    requests:
+      storage: 1Gi
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: vehiclemanagementapi
+spec: 
+  #type: NodePort
+  selector:
+    app: vehiclemanagementapi
+  ports:
+    - port: 5000
+      targetPort: 5000
+      protocol: TCP
+      #nodePort: 30006
+          
+

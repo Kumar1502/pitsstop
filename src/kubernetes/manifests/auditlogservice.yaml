@@ -1,0 +1,30 @@
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auditlogservice
+spec:
+  minReadySeconds: 5
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  selector:
+    matchLabels:
+      app: auditlogservice
+  template:
+    metadata:
+      labels: 
+        app: auditlogservice
+        version: v1.0
+    spec:
+      containers:
+        - name: auditlogservice
+          image: pitstop/auditlogservice:1.0
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 350Mi
+        

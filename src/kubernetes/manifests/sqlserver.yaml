@@ -1,0 +1,72 @@
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sqlserver
+spec:
+  minReadySeconds: 5
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  selector:
+    matchLabels:
+      app: sqlserver
+  template:
+    metadata:
+      labels: 
+        app: sqlserver
+        version: v1.0
+    spec:
+      containers:
+        - name: sqlserver
+          image: mcr.microsoft.com/azure-sql-edge
+          env: 
+            - name: ACCEPT_EULA=Y
+              value: 'Y'
+            - name: MSSQL_PID
+              value: Developer
+            - name: SA_PASSWORD
+              value: 8jkGh47hnDw89Haq8LN2
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 350Mi
+          ports:
+            - containerPort: 1433
+              protocol: "TCP"
+          volumeMounts:
+            - name: sqlserver-vol
+              mountPath: /var/opt/mssql
+      volumes: 
+        - name: sqlserver-vol
+          persistentVolumeClaim:
+            claimName: sqlserver-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sqlserver-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: managed-csi
+  resources:
+    requests:
+      storage: 1Gi
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: sqlserver
+spec: 
+  selector:
+    app: sqlserver
+  ports:
+    - port: 1434
+      targetPort: 1433
+      protocol: TCP
+        
+

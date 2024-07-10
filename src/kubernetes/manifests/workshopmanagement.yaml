@@ -1,0 +1,65 @@
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: workshopmanagementapi
+spec:
+  minReadySeconds: 5
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  selector:
+    matchLabels:
+      app: workshopmanagementapi
+  template:
+    metadata:
+      labels: 
+        app: workshopmanagementapi
+        version: v1.0
+    spec:
+      containers:
+        - name: workshopmanagementapi
+          image: pitstop/workshopmanagementapi:1.0
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 350Mi
+          ports:
+            - containerPort: 5200
+              protocol: "TCP"
+          volumeMounts:
+            - name: workshopmanagementapi-vol
+              mountPath: /var/lib
+      volumes: 
+        - name: workshopmanagement-vol
+          persistentVolumeClaim:
+            claimName: workshopmanagementapi-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: workshopmanagementapi-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: managed-csi
+  resources:
+    requests:
+      storage: 1Gi
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: workshopmanagementapi
+spec: 
+  selector:
+    app: workshopmanagementapi
+  ports:
+    - port: 5200
+      targetPort: 5200
+      protocol: TCP
+          
+

@@ -1,0 +1,30 @@
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: invoiceservice
+spec:
+  minReadySeconds: 5
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  selector:
+    matchLabels:
+      app: invoiceservice
+  template:
+    metadata:
+      labels: 
+        app: invoiceservice
+        version: v1.0
+    spec:
+      containers:
+        - name: invoiceservice
+          image: pitstop/invoiceservice:1.0
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 350Mi
+        

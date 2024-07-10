@@ -1,0 +1,30 @@
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: workshopmanagementeventhandler
+spec:
+  minReadySeconds: 5
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  selector:
+    matchLabels:
+      app: workshopmanagementeventhandler
+  template:
+    metadata:
+      labels: 
+        app: workshopmanagementeventhandler
+        version: v1.0
+    spec:
+      containers:
+        - name: workshopmanagementeventhandler
+          image: pitstop/workshopmanagementeventhandler:1.0
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 350Mi
+        

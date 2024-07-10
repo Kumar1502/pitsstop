@@ -1,0 +1,48 @@
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp
+spec:
+  minReadySeconds: 5
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  selector:
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      labels: 
+        app: webapp
+        version: v1.0
+    spec:
+      containers:
+        - name: webapp
+          image: pitstop/webapp:1.0
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 350Mi
+          ports:
+            - containerPort: 7005
+              protocol: "TCP"
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp
+spec: 
+  #type: NodePort
+  selector:
+    app: webapp
+  ports:
+    - port: 7005
+      targetPort: 7005
+      protocol: TCP
+      #nodePort: 30005
+          
+

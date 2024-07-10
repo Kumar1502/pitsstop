@@ -1,0 +1,48 @@
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logserver
+spec:
+  minReadySeconds: 5
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  selector:
+    matchLabels:
+      app: logserver
+  template:
+    metadata:
+      labels: 
+        app: logserver
+        version: v1.0
+    spec:
+      containers:
+        - name: logserver
+          image: datalust/seq:latest
+          env: 
+            - name: ACCEPT_EULA
+              value: 'Y'
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 350Mi
+          ports:
+            - containerPort: 80
+              protocol: "TCP"
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: logserver
+spec: 
+  selector:
+    app: logserver
+  ports:
+    - port: 5341
+      targetPort: 80
+      protocol: TCP  
+
