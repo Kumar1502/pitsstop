@@ -34,7 +34,7 @@ spec:
             - name: workshopmanagementapi-vol
               mountPath: /var/lib
       volumes: 
-        - name: workshopmanagement-vol
+        - name: workshopmanagementapi-vol
           persistentVolumeClaim:
             claimName: workshopmanagementapi-pvc
 ---

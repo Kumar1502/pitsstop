@@ -24,7 +24,7 @@ spec:
         - name: sqlserver
           image: mcr.microsoft.com/azure-sql-edge
           env: 
-            - name: ACCEPT_EULA=Y
+            - name: ACCEPT_EULA
               value: 'Y'
             - name: MSSQL_PID
               value: Developer

@@ -41,10 +41,12 @@ spec:
   selector:
     app: mailserver
   ports:
-    - port: 25
+    - name: test1
+      port: 25
       targetPort: 25
       protocol: TCP
-    - port: 4000
+    - name: test2
+      port: 4000
       targetPort: 80
       protocol: TCP  
 
