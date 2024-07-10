@@ -5,7 +5,7 @@ metadata:
   name: auditlogservice
 spec:
   minReadySeconds: 5
-  replicas: 2
+  replicas: 1
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -22,9 +22,10 @@ spec:
     spec:
       containers:
         - name: auditlogservice
-          image: pitstop/auditlogservice:1.0
-          resources:
-            limits:
-              cpu: 1000m
-              memory: 350Mi
+          image: panky7700/auditlogservice:1.0
+          restartPolicy: Always
+          # resources:
+          #   limits:
+          #     cpu: 1000m
+          #     memory: 350Mi
         

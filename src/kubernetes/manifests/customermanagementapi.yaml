@@ -5,7 +5,7 @@ metadata:
   name: customermanagementapi
 spec:
   minReadySeconds: 5
-  replicas: 2
+  replicas: 1
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -22,33 +22,14 @@ spec:
     spec:
       containers:
         - name: customermanagementapi
-          image: pitstop/customermanagementapi:1.0
-          resources:
-            limits:
-              cpu: 1000m
-              memory: 350Mi
+          image: panky7700/customermanagementapi:1.0
           ports:
             - containerPort: 5100
               protocol: "TCP"
-          volumeMounts:
-            - name: customermanagementapi-vol
-              mountPath: /var/lib
-      volumes: 
-        - name: customermanagementapi-vol
-          persistentVolumeClaim:
-            claimName: customermanagemetapi-pvc
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: customermanagemetapi-pvc
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: managed-csi
-  resources:
-    requests:
-      storage: 1Gi
+          # resources:
+          #   limits:
+          #     cpu: 1000m
+          #     memory: 350Mi              
 --- 
 apiVersion: v1
 kind: Service

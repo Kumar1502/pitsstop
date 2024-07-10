@@ -5,7 +5,7 @@ metadata:
   name: workshopmanagementapi
 spec:
   minReadySeconds: 5
-  replicas: 2
+  replicas: 1
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: workshopmanagementapi
-          image: pitstop/workshopmanagementapi:1.0
+          image: panky7700/workshopmanagementapi:1.0
           resources:
             limits:
               cpu: 1000m
@@ -30,25 +30,6 @@ spec:
           ports:
             - containerPort: 5200
               protocol: "TCP"
-          volumeMounts:
-            - name: workshopmanagementapi-vol
-              mountPath: /var/lib
-      volumes: 
-        - name: workshopmanagementapi-vol
-          persistentVolumeClaim:
-            claimName: workshopmanagementapi-pvc
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: workshopmanagementapi-pvc
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: managed-csi
-  resources:
-    requests:
-      storage: 1Gi
 --- 
 apiVersion: v1
 kind: Service

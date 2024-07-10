@@ -5,7 +5,7 @@ metadata:
   name: webapp
 spec:
   minReadySeconds: 5
-  replicas: 2
+  replicas: 1
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -22,11 +22,7 @@ spec:
     spec:
       containers:
         - name: webapp
-          image: pitstop/webapp:1.0
-          resources:
-            limits:
-              cpu: 1000m
-              memory: 350Mi
+          image: panky7700/webapp:1.0
           ports:
             - containerPort: 7005
               protocol: "TCP"
@@ -36,7 +32,7 @@ kind: Service
 metadata:
   name: webapp
 spec: 
-  #type: NodePort
+  type: LoadBalancer
   selector:
     app: webapp
   ports:

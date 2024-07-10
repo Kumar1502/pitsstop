@@ -23,15 +23,15 @@ spec:
       containers:
         - name: mailserver
           image: maildev/maildev:1.1.0
-          resources:
-            limits:
-              cpu: 1000m
-              memory: 350Mi
           ports:
             - containerPort: 25
               protocol: "TCP"
             - containerPort: 80
               protocol: "TCP"
+          # resources:
+          #   limits:
+          #     cpu: 1000m
+          #     memory: 350Mi              
 --- 
 apiVersion: v1
 kind: Service

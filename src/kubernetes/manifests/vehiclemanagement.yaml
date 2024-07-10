@@ -5,7 +5,7 @@ metadata:
   name: vehiclemanagementapi
 spec:
   minReadySeconds: 5
-  replicas: 2
+  replicas: 1
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -22,33 +22,10 @@ spec:
     spec:
       containers:
         - name: vehiclemanagementapi
-          image: pitstop/vehiclemanagementapi:1.0
-          resources:
-            limits:
-              cpu: 1000m
-              memory: 350Mi
+          image: panky7700/vehiclemanagementapi:1.0
           ports:
             - containerPort: 5000
               protocol: "TCP"
-          volumeMounts:
-            - name: vehiclemanagementapi-vol
-              mountPath: /var/lib
-      volumes: 
-        - name: vehiclemanagementapi-vol
-          persistentVolumeClaim:
-            claimName: vehiclemanagementapi-pvc
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: vehiclemanagementapi-pvc
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: managed-csi
-  resources:
-    requests:
-      storage: 1Gi
 --- 
 apiVersion: v1
 kind: Service
